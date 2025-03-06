@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { AnimatePresence } from 'framer-motion';
 
-function App() {
+// Import context provider
+import { AppProvider, useAppContext } from './context/AppContext';
+
+// Import pages
+import HomePage from './pages/HomePage';
+import LessonSelectPage from './pages/LessonSelectPage';
+import LessonPage from './pages/LessonPage';
+import FeedbackPage from './pages/FeedbackPage';
+
+// Import global styles
+import './styles/globals.css';
+
+// Main App Component
+const AppContent = () => {
+  const { currentScreen, showFeedback } = useAppContext();
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AnimatePresence mode="wait">
+      {currentScreen === 'home' && <HomePage />}
+      
+      {currentScreen === 'lessonSelect' && <LessonSelectPage />}
+      
+      {currentScreen === 'lesson' && <LessonPage />}
+      
+      {showFeedback && <FeedbackPage />}
+    </AnimatePresence>
   );
-}
+};
+
+// Wrap the app with the context provider
+const App = () => {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
+  );
+};
 
 export default App;
